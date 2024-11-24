@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class idle : MonoBehaviour
 {
-    [SerializeField] private GameObject playerIdle;
     float vel = 2f;
     private float movendo;
     private Rigidbody2D rb;
@@ -25,15 +24,16 @@ public class idle : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        rb = playerIdle.GetComponent<Rigidbody2D>();
-        animator = playerIdle.GetComponent<Animator>();
-        spriterender = playerIdle.GetComponent<SpriteRenderer>(); 
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        spriterender = GetComponent<SpriteRenderer>(); 
     }
 
     // Update is called once per frame
     void Update()
     {
         movendo = Input.GetAxis("Horizontal");
+        
         
         if (movendo < 0f)
         {
@@ -73,7 +73,7 @@ public class idle : MonoBehaviour
         animator.SetBool(runshootHash, tiro & movendo!=0);
     }
 
-
+   
     private void OnCollisionEnter2D(Collision2D collision)
     {
         jump = 2f;
