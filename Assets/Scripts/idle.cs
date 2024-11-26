@@ -8,6 +8,9 @@ public class idle : MonoBehaviour
 {
     float vel = 2f;
     private float movendo;
+    private bool vira = true;
+    private bool move = false;
+    private Transform flip;
     private Rigidbody2D rb;
     private Animator animator;
     private float jump = 2f;
@@ -15,34 +18,51 @@ public class idle : MonoBehaviour
     private int jupingHash = Animator.StringToHash("jumping");
     private int shootingHash = Animator.StringToHash("shooting");
     private int runshootHash = Animator.StringToHash("runshoot");
-    private SpriteRenderer spriterender;
     private bool tiro;
     [SerializeField] private GameObject balas;
     [SerializeField] private GameObject cano;
-    [SerializeField] private GameObject cano2;
 
     // Start is called before the first frame update
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        spriterender = GetComponent<SpriteRenderer>(); 
+        flip = GetComponent<Transform>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        movendo = Input.GetAxis("Horizontal");
         
-        
-        if (movendo < 0f)
+        if (Input.GetKey(KeyCode.A) | Input.GetKey(KeyCode.LeftArrow))
         {
-            spriterender.flipX = true;
+            if (!vira)
+            {
+                transform.eulerAngles = new Vector3(0f, 180f, 0f);
+                vira = true;
+            }
+            transform.Translate(new Vector2(vel * Time.deltaTime, 0));
+            move = true;
+           
+
         }
-        else if (movendo > 0f)
+        else if (Input.GetKey(KeyCode.RightArrow) | Input.GetKey(KeyCode.D))
         {
-            spriterender.flipX = false;
+            if (vira)
+            {
+                transform.eulerAngles = new Vector3(0f, 0f, 0f);
+                vira = false;
+            }   
+            transform.Translate(new Vector2(vel * Time.deltaTime, 0));
+            move = true;
+            
         }
+        else
+        {
+            move = false;
+        }
+
+
 
         if ((Input.GetKeyDown(KeyCode.Space)| Input.GetKey(KeyCode.UpArrow)) & jump>0)
         {
@@ -53,24 +73,19 @@ public class idle : MonoBehaviour
         if (Input.GetKey(KeyCode.Q))
 
         {
-            tiro = true;
-            if (spriterender.flipX)
-            {
-                Instantiate(balas, new Vector3(cano2.transform.position.x, cano2.transform.position.y, 0), cano2.transform.rotation * quaternion.Euler(0f, 180f, 0f)); 
-            }
-            else
-            {
-                Instantiate(balas, new Vector3(cano.transform.position.x, cano.transform.position.y, 0), cano.transform.rotation);
-            }
+           tiro = true;
+           Instantiate(balas, cano.transform.position, cano.transform.rotation);
+        
         }
         else
         {
             tiro = false;
         }
-        animator.SetBool(runningHash, movendo != 0 & tiro==false);
+
+        animator.SetBool(runningHash, move & tiro==false);
         animator.SetBool(jupingHash, jump != 2f);
-        animator.SetBool(shootingHash, tiro & movendo==0);
-        animator.SetBool(runshootHash, tiro & movendo!=0);
+        animator.SetBool(shootingHash, tiro & !move);
+        animator.SetBool(runshootHash, tiro & move);
     }
 
    
@@ -79,8 +94,9 @@ public class idle : MonoBehaviour
         jump = 2f;
     }
 
-    private void FixedUpdate()
+    private void FlipPlayer()
     {
-        rb.velocity = new Vector2(vel * movendo, rb.velocity.y);
+        vira = !vira;
+        transform.eulerAngles = new Vector3(0f, 180f, 0f);
     }
 }
