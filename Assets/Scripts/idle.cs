@@ -7,9 +7,8 @@ using UnityEngine;
 public class idle : MonoBehaviour
 {
     float vel = 2f;
-    private float movendo;
     private bool vira = true;
-    private bool move = false;
+    private bool move, tiro = false;
     private Transform flip;
     private Rigidbody2D rb;
     private Animator animator;
@@ -18,7 +17,6 @@ public class idle : MonoBehaviour
     private int jupingHash = Animator.StringToHash("jumping");
     private int shootingHash = Animator.StringToHash("shooting");
     private int runshootHash = Animator.StringToHash("runshoot");
-    private bool tiro;
     [SerializeField] private GameObject balas;
     [SerializeField] private GameObject cano;
 
@@ -88,15 +86,8 @@ public class idle : MonoBehaviour
         animator.SetBool(runshootHash, tiro & move);
     }
 
-   
     private void OnCollisionEnter2D(Collision2D collision)
     {
         jump = 2f;
-    }
-
-    private void FlipPlayer()
-    {
-        vira = !vira;
-        transform.eulerAngles = new Vector3(0f, 180f, 0f);
     }
 }
