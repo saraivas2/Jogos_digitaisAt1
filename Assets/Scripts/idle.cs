@@ -31,8 +31,8 @@ public class idle : MonoBehaviour
     void Update()
     {
         comando();
-        animator.SetBool(runningHash, move & tiro == false);
-        animator.SetBool(jupingHash, jump != 2f);
+        animator.SetBool(runningHash, move & !tiro);
+        animator.SetBool(jupingHash, jump >0 & jump<2f);
         animator.SetBool(shootingHash, tiro & !move);
         animator.SetBool(runshootHash, tiro & move);
     }
@@ -40,6 +40,11 @@ public class idle : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         jump = 2f;
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        move=false;
     }
 
     void comando()
