@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class mover_balas : MonoBehaviour
 {
-    float vel = 5.0f;// Start is called before the first frame update
-    int time = 1000;
+    float vel = 4.0f;// Start is called before the first frame update
+    int time = 2000;
     [SerializeField] private GameObject Bala;
     
     void Start()
@@ -21,7 +21,7 @@ public class mover_balas : MonoBehaviour
         if (time == 0)
         {
             Destroy(Bala);
-            time = 1000;
+            time = 2000;
         }
     }
 }

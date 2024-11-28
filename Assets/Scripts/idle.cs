@@ -7,7 +7,6 @@ using UnityEngine;
 public class idle : MonoBehaviour
 {
     float vel = 2f;
-    private bool vira = true;
     private bool move, tiro = false;
     private Transform flip;
     private Rigidbody2D rb;
@@ -31,56 +30,8 @@ public class idle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (Input.GetKey(KeyCode.A) | Input.GetKey(KeyCode.LeftArrow))
-        {
-            if (!vira)
-            {
-                transform.eulerAngles = new Vector3(0f, 180f, 0f);
-                vira = true;
-            }
-            transform.Translate(new Vector2(vel * Time.deltaTime, 0));
-            move = true;
-           
-
-        }
-        else if (Input.GetKey(KeyCode.RightArrow) | Input.GetKey(KeyCode.D))
-        {
-            if (vira)
-            {
-                transform.eulerAngles = new Vector3(0f, 0f, 0f);
-                vira = false;
-            }   
-            transform.Translate(new Vector2(vel * Time.deltaTime, 0));
-            move = true;
-            
-        }
-        else
-        {
-            move = false;
-        }
-
-
-
-        if ((Input.GetKeyDown(KeyCode.Space)| Input.GetKey(KeyCode.UpArrow)) & jump>0)
-        {
-            jump--;
-            rb.AddForce(Vector2.up * 350);
-        }
-
-        if (Input.GetKey(KeyCode.Q))
-
-        {
-           tiro = true;
-           Instantiate(balas, cano.transform.position, cano.transform.rotation);
-        
-        }
-        else
-        {
-            tiro = false;
-        }
-
-        animator.SetBool(runningHash, move & tiro==false);
+        comando();
+        animator.SetBool(runningHash, move & tiro == false);
         animator.SetBool(jupingHash, jump != 2f);
         animator.SetBool(shootingHash, tiro & !move);
         animator.SetBool(runshootHash, tiro & move);
@@ -89,5 +40,50 @@ public class idle : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         jump = 2f;
+    }
+
+    void comando()
+    {
+        if (Input.GetKey(KeyCode.A) | Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.eulerAngles = new Vector3(0f, 180f, 0f);
+            transform.Translate(new Vector2(vel * Time.deltaTime, 0));
+            move = true;
+
+
+        }
+        else if (Input.GetKey(KeyCode.RightArrow) | Input.GetKey(KeyCode.D))
+        {
+            transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            transform.Translate(new Vector2(vel * Time.deltaTime, 0));
+            move = true;
+
+        }
+        else
+        {
+            move = false;
+        }
+
+
+
+        if ((Input.GetKeyDown(KeyCode.Space) | Input.GetKey(KeyCode.UpArrow)) & jump > 0)
+        {
+            jump--;
+            rb.AddForce(Vector2.up * 350);
+        }
+
+        if (Input.GetKey(KeyCode.Q))
+
+        {
+            tiro = true;
+            Instantiate(balas, cano.transform.position, cano.transform.rotation);
+
+        }
+        else
+        {
+            tiro = false;
+        }
+
+        
     }
 }
